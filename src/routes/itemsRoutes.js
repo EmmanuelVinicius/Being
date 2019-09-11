@@ -23,21 +23,24 @@ class ItemsRoutes extends BaseRoute {
                         skip: Joi.number().integer().default(0),
                         limit: Joi.number().integer().default(10),
                         title: Joi.string().min(3).max(100),
+                        owner: Joi.string().min(3).max(100),
+                        status: Joi.number().integer().default(1),
+                        datetime: Joi.date(),
+                        priority: Joi.number().integer()
                     },
                 },
 
-                handler: (request, headers) => {
+                handler: async (request, response) => {
                     try {
-                        const { skip, limit, title } = request.query;
-                        const query = title ? {
-                            title: { $regex: `.*${title}*.` }
-                        } : {}
+                        const stringData = JSON.stringify(request.query);
+                        const { skip, limit } = request.query
+                        const data = JSON.parse(stringData);
 
-                        return this._db.read(query, skip, limit);
+                        const teste = await this._db.read(data, skip, limit);
+                        return teste
                     } catch (error) {
-                        console.error('Moio pai', error);
-                        return Boom.internal();
-
+                        console.error('DEU RUIM', error)
+                        return Boom.internal('Erro interno do servidor');
                     }
                 }
             }
@@ -56,10 +59,10 @@ class ItemsRoutes extends BaseRoute {
                     payload: {
                         title: Joi.string().required().min(3).max(100),
                         owner: Joi.string().required().min(3).max(100),
-                        status: Joi.number().required().default(1),
-                        priority: Joi.number().required().default(4)
-                    }
-
+                        status: Joi.number().integer().default(1),
+                        datetime: Joi.date(),
+                        priority: Joi.number().integer().default(4)
+                    },
                 }
             },
             handler: async (request) => {
@@ -77,6 +80,7 @@ class ItemsRoutes extends BaseRoute {
             }
         }
     }
+
     update() {
         return {
             path: '/items/{id}',
@@ -89,9 +93,12 @@ class ItemsRoutes extends BaseRoute {
                         id: Joi.string().required()
                     },
                     payload: {
-                        title: Joi.string().required().min(3).max(100),
-                        owner: Joi.string().required().min(3).max(100),
-                    }
+                        title: Joi.string().min(3).max(100),
+                        owner: Joi.string().min(3).max(100),
+                        status: Joi.number().integer().default(1),
+                        datetime: Joi.date(),
+                        priority: Joi.number().integer().default(4)
+                    },
                 }
             },
             handler: async (request) => {
@@ -114,6 +121,7 @@ class ItemsRoutes extends BaseRoute {
             }
         }
     }
+
     delete() {
         return {
             path: '/items/{id}',

@@ -1,8 +1,9 @@
 const Hapi = require('hapi');
 const MongoDb = require('./database/strategies/mongodb/mongodbStrategy');
 const Context = require('./database/strategies/base/contextStrategy');
-const PessoaSchema = require('./database/strategies/mongodb/schemas/pessoasSchema');
-const PessoaRoute = require('./routes/itemsRoutes');
+
+const ItemSchema = require('./database/strategies/mongodb/schemas/itemsSchema');
+const ItemRoute = require('./routes/itemsRoutes');
 const AuthRoute = require('./routes/authRoutes');
 
 const HapiAuthJwt2 = require('hapi-auth-jwt2')
@@ -17,7 +18,7 @@ function mapRoutes(instance, methods) {
 
 async function main() {
     const connection = MongoDb.connect();
-    const context = new Context(new MongoDb(connection, PessoaSchema));
+    const context = new Context(new MongoDb(connection, ItemSchema));
 
     await app.register([HapiAuthJwt2,]);
     app.auth.strategy('jwt', 'jwt', {
@@ -33,7 +34,7 @@ async function main() {
     })
     app.auth.default('jwt')
     app.route([
-        ...mapRoutes(new PessoaRoute(context), PessoaRoute.methods()),
+        ...mapRoutes(new ItemRoute(context), ItemRoute.methods()),
         ...mapRoutes(new AuthRoute(JWT_DEFAULT_SECRET), AuthRoute.methods())
     ]);
 
