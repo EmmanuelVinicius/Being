@@ -1,0 +1,30 @@
+{
+  "name": "being",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha src/tests/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EmmanuelVinicius/Being.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EmmanuelVinicius/Being/issues"
+  },
+  "homepage": "https://github.com/EmmanuelVinicius/Being#readme",
+  "devDependencies": {
+    "assert": "^2.0.0",
+    "mocha": "^6.2.0"
+  },
+  "dependencies": {
+    "hapi": "^18.1.0",
+    "hapi-auth-jwt2": "^8.6.2",
+    "mongoose": "^5.7.0",
+    "sequelize": "^5.18.4"
+  }
+}
