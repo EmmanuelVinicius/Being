@@ -22,7 +22,7 @@ const UserSchema = {
             unique: true,
             required: true
         },
-        senha: {
+        password: {
             type: Sequelize.STRING,
             required: true
         },

@@ -21,7 +21,7 @@ const projectsSchema = new Mongoose.Schema({
         type: Date,
     },
     items: [{
-            type: mongoose.Schema.Types.ObjectId,
+            type: Mongoose.Schema.Types.ObjectId,
             ref: 'Items', 
         }]
 

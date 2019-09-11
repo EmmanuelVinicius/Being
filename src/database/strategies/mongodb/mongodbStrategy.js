@@ -1,4 +1,4 @@
-const ICrud = require('../interfaces/ICrud')
+const ICrud = require('./../../../interfaces/ICrud')
 const Mongoose = require('mongoose')
 
 const STATUS = {
@@ -25,7 +25,7 @@ class MongoDB extends ICrud {
     }
 
     static connect() {
-        Mongoose.connect('mongodb+srv://emmanuel:Evno@0603@pessoas-e2ext.mongodb.net/test?retryWrites=true&w=majority',
+        Mongoose.connect(`mongodb+srv://emmanuel:emmanuel@pessoas-e2ext.mongodb.net/TodoList`,
             { useNewUrlParser: true }, function (error) {
                 if (!error) return;
                 console.log("Não liguei lá não, pai", error);

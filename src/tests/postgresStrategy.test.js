@@ -4,22 +4,20 @@ const UserSchema = require('./../database/strategies/postgres/schemas/userSchema
 const Context = require('./../database/strategies/base/contextStrategy');
 
 let context = {};
-const MOCK_USUARIO_CADASTRAR = {
+const MOCK_CREATE_USER = {
     userrole: 'user',
-    nome: 'Felipe',
-    sobrenome: 'Geraldo',
+    name: 'Felipe',
     email: 'felipe.geraldo@serafinsdedeus.com.br',
-    senha: '1234'
+    password: '1234'
 };
-const MOCK_USUARIO_ATUALIZAR = {
+const MOCK_UPDATE_USER = {
     userrole: 'user',
-    nome: 'Aline',
-    sobrenome: 'Cristina',
-    email: 'aline.cristina@serafinsdedeus.com.br',
-    senha: '1234'
+    name: `Felipe`,
+    email: `felipe.geraldo.${new Date()}@serafinsdedeus.com.br`,
+    password: '1234'
 };
 
-describe('Suite de testes do Postgres Strategy', function tests() {
+describe('Postgres Strategy tests suit', function tests() {
     this.timeout(Infinity);
     this.beforeAll(async () => {
         const connection = await Postgres.connect();
@@ -28,7 +26,7 @@ describe('Suite de testes do Postgres Strategy', function tests() {
         context = new Context(new Postgres(connection, model))
 
         await context.delete();
-        await context.create(MOCK_USUARIO_ATUALIZAR)
+        await context.create(MOCK_UPDATE_USER)
     })
     it('Conecta no PostgresSql', async () => {
         const result = await context.isConected()
@@ -36,28 +34,28 @@ describe('Suite de testes do Postgres Strategy', function tests() {
         assert.deepStrictEqual(result, true)
     })
     it('Cadastra alguem no PostgresSql', async () => {
-        const result = await context.create(MOCK_USUARIO_CADASTRAR)
+        const result = await context.create(MOCK_CREATE_USER)
         delete result.id
 
-        assert.deepStrictEqual(result, MOCK_USUARIO_CADASTRAR)
+        assert.deepStrictEqual(result, MOCK_CREATE_USER)
     })
     it('Lista os usuarios do PostgresSql', async () => {
-        const [result] = await context.read({ nome: MOCK_USUARIO_CADASTRAR.nome })
+        const [result] = await context.read({ name: MOCK_CREATE_USER.name })
         delete result.id
 
-        assert.deepStrictEqual(result, MOCK_USUARIO_CADASTRAR)
+        assert.deepStrictEqual(result.name, MOCK_CREATE_USER.name)
     })
     it('Atualiza alguem no PostgresSql', async () => {
-        const [itemAtualizar] = await context.read({ nome: MOCK_USUARIO_ATUALIZAR.nome })
+        const [itemAtualizar] = await context.read({ name: MOCK_UPDATE_USER.name })
         const novoItem = {
-            ...MOCK_USUARIO_ATUALIZAR,
-            nome: 'André'
+            ...MOCK_UPDATE_USER,
+            name: 'André'
         }
         const [result] = await context.update(itemAtualizar.id, novoItem)
         const [itemAtualizado] = await context.read({ id: itemAtualizar.id })
 
         assert.deepStrictEqual(result, 1)
-        assert.deepStrictEqual(itemAtualizado.nome, novoItem.nome)
+        assert.deepStrictEqual(itemAtualizado.name, novoItem.name)
     })
     it('Remove alguem por id no PostgresSql', async () => {
         const [item] = await context.read({})

@@ -38,14 +38,18 @@ class Postgres extends ICrud {
             await this._connection.authenticate()
             return true;
         } catch (error) {
-            /* console.error('No postgres nn deu, pai', error); */
+            console.error('No postgres nn deu, pai', error);
             return false;
         }
     }
 
     async create(item) {
-        const { dataValues } = await this._schema.create(item)
-        return dataValues;
+        try {
+            const { dataValues } = await this._schema.create(item)
+            return dataValues;
+        } catch (error) {
+            console.error('Faio, papa', error);            
+        }
     }
 
     async read(query = {}) {
