@@ -1,20 +1,18 @@
-const BaseRoute = require('./base/baseRoute');
 const Joi = require('joi');
 const Boom = require('boom');
 const Jwt = require('jsonwebtoken');
 
-const failAction = (request, headers, erro) => {
-    throw erro;
-}
-const USER = {
-    username: 'prisrael',
-    password: 'aliceanna'
-}
+const PasswordHelper = require('./../helpers/passwordHelper');
+const BaseRoute = require('./base/baseRoute');
+
+const failAction = (request, headers, erro) => { console.error('Caiu no failAction, papa', erro); }
+
 
 class AuthRoutes extends BaseRoute {
-    constructor(secret) {
+    constructor(secret, db) {
         super();
         this._secret = secret;
+        this._db = db;
     }
     login() {
         return {
@@ -22,32 +20,36 @@ class AuthRoutes extends BaseRoute {
             method: 'POST',
             config: {
                 auth: false,
-                tags: ['api'],
-                description: 'Obter o token de acesso',
-                notes: 'Pega o token de login com usuario e senha',
                 validate: {
                     failAction,
                     payload: {
-                        email: Joi.string().email().required(),
+                        username: Joi.string().email().required(),
                         password: Joi.string().required()
                     }
                 }
             },
             handler: async (request) => {
-                const { username, password } = await request.payload;
-
-                if (username !== USER.username || password !== USER.password)
-                    return Boom.unauthorized();
-
-                const token = Jwt.sign({
+                const {
                     username,
-                    id: 1
-                }, this._secret)
-                
+                    password
+                } = await request.payload;
+
+                const [user] = await this._db.read({
+                    email: username.toLowerCase()
+                })
+                console.log()
+                if (!user) return Boom.unauthorized('Email error');
+
+                const match = await PasswordHelper.comparePassword(password, user.password);
+                if (!match) return Boom.unauthorized('Password error');
+                const token = Jwt.sign({
+                    username: username,
+                }, this._secret);
+
                 return { token }
+            }
         }
     }
-}
 }
 
 module.exports = AuthRoutes;

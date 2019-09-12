@@ -8,13 +8,13 @@ const MOCK_CREATE_USER = {
     userrole: 'user',
     name: 'Felipe',
     email: 'felipe.geraldo@serafinsdedeus.com.br',
-    password: '1234'
+    password: '$2b$04$SdlyEJsy.o5UgsgVr5csJ.ralZVyPviGH80BOb0zJCTSis30RB8Ba'
 };
 const MOCK_UPDATE_USER = {
     userrole: 'user',
-    name: `Felipe`,
-    email: `felipe.geraldo.${new Date()}@serafinsdedeus.com.br`,
-    password: '1234'
+    name: `Felipe${new Date()}`,
+    email: `felipe.update@serafinsdedeus.com.br`,
+    password: '$2b$04$SdlyEJsy.o5UgsgVr5csJ.ralZVyPviGH80BOb0zJCTSis30RB8Ba'
 };
 
 describe('Postgres Strategy tests suit', function tests() {
