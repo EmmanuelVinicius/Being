@@ -1,0 +1,81 @@
+.items-list {
+    max-width: 700px;
+    margin: 2px auto 0;
+    padding: 0 20px;
+}
+
+.items-list article {
+    background: #fff;
+    border: 1px solid #ddd;
+    margin-bottom: 2px;
+    display: flex;
+    justify-content: space-between
+}
+
+.items-list article i {
+    border-radius: 50%;
+    padding: 1%;
+}
+
+.items-list p {
+    font-size: 16px;
+    color: #999;
+    margin-top: 5px;
+    line-height: 24px;
+}
+
+.items-list article div {
+    padding: 10px;
+    left: 0;
+}
+
+.priority {
+    width: 20%;
+    height: 20%;
+    transition: all 0.2s;
+}
+
+.priority:hover {
+    background: #fff;
+    border: 2px solid #2f96da;
+    color: #2f96da;
+}
+.ant-collapse-header{
+    background: #c7c7c7;
+    border-radius: 4px;
+    margin: 12px 0;
+    overflow: hidden;
+}
+.ant-collapse > .ant-collapse-item{
+    border:0
+}
+.items-list .actions {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 80px;
+}
+
+.items-list .actions button {
+    padding: 10px;
+    margin-top: 20px;
+    width: 100%;
+    border: 0;
+    background: #2f96da;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.items-list .actions button[disabled] {
+    opacity: .5;
+    cursor: default;
+}
+
+.items-list .actions button:hover {
+    opacity: .7;
+}
+
+.items-list .actions button[disabled]:hover {
+    opacity: .5;
+}

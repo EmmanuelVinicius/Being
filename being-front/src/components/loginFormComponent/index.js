@@ -13,11 +13,13 @@ class NormalLoginForm extends React.Component {
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFields(async (err, values) => {
-            if (!err) {
-                await apiService.post(
-                    '/login',
-                    values
-                );
+            if (err) return <><h1>Unauthorized</h1></>;
+
+            const result = await apiService.post('/login', values);
+            if (result.status === 200) {
+                console.log('token', result);
+                localStorage.setItem('key', result.data.token);
+                this.props.history.push("/items");
             }
         });
     };
