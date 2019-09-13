@@ -46,7 +46,7 @@ class AuthRoutes extends BaseRoute {
                     username: username,
                 }, this._secret);
 
-                return { token }
+                return { token, user:user.id }
             }
         }
     }

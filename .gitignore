@@ -3,26 +3,26 @@
 
 # React dependencies
 
-being-frontend/node_modules
-being-frontend/.pnp
-being-frontend/.pnp.js
+being-front/node_modules
+being-front/.pnp
+being-front/.pnp.js
 
 # testing
-being-frontend/coverage
+being-front/coverage
 
 # production
-being-frontend/build
+being-front/build
 
 # misc
-being-frontend/.DS_Store
-being-frontend/.env.local
-being-frontend/.env.development.local
-being-frontend/.env.test.local
-being-frontend/.env.production.local
+being-front/.DS_Store
+being-front/.env.local
+being-front/.env.development.local
+being-front/.env.test.local
+being-front/.env.production.local
 
-being-frontend/npm-debug.log*
-being-frontend/yarn-debug.log*
-being-frontend/yarn-error.log*
+being-front/npm-debug.log*
+being-front/yarn-debug.log*
+being-front/yarn-error.log*
 
 #Node dependencies
 
