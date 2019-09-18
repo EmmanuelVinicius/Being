@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 import { Form, Icon, Input, Button } from 'antd';
 import apiService from './../../sevices/apiService';
 
-import 'antd/es/form/style/index.css';
-import 'antd/es/icon/style/index.css';
-import 'antd/es/input/style/index.css';
-import 'antd/es/button/style/index.css';
+import 'antd/es/form/style/css';
+import 'antd/es/icon/style/css';
+import 'antd/es/input/style/css';
+import 'antd/es/button/style/css';
 import './style.css';
 
 class NormalLoginForm extends React.Component {

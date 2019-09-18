@@ -13,7 +13,7 @@ const itemSchema = new Mongoose.Schema({
         type: Number,
         default: 1,
     },
-    dateTime: {
+    schedule: {
         type: Date,
     },
     priority: {

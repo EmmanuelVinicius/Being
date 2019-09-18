@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
+import { Collapse, Icon } from 'antd';
 import apiService from '../../sevices/apiService';
-import { Collapse } from 'antd';
-import { Icon } from 'antd'
+import CreateItemButton from '../createItemButtonComponent';
 
-import 'antd/es/icon/style/index.css';
-import 'antd/es/collapse/style/index.css';
+import 'antd/es/icon/style/css';
+import 'antd/es/collapse/style/css';
 import './style.css';
 
 const { Panel } = Collapse;
@@ -13,109 +13,70 @@ const PRIORITY_COLOR = {
     2: "#f7ee65",
     3: "#6762f5",
     4: "#e3e3e3"
-}
-// const genExtra = (item) => (
-//     <span
-//         className="priority"
-//         style={PRIORITY_COLOR[item.priority]}
-//     >
-//     </span>
-// );
-const genExtra = (item) => (
+};
+const genExtra = item => (
     <Icon
-      type="flag"
-      theme="twoTone"
-      twoToneColor={PRIORITY_COLOR[item]}
-      onClick={event => {
-        // If you don't want click extra trigger collapse, you can prevent this:
-        event.stopPropagation();
-      }}
+        type="flag"
+        theme="twoTone"
+        twoToneColor={PRIORITY_COLOR[item]}
+        onClick={event => {
+            // If you don't want click extra trigger collapse, you can prevent this:
+            event.stopPropagation();
+        }}
     />
-  );
+);
+const completeIcon = item => (
+    <Icon
+        type="check-circle"
+        style={{ fontSize: '18px' }}
+        onClick={async event => {
+            console.log('item', item);
+            event.stopPropagation();
+            apiService.patch(`/items/${item.panelKey}`, { status: 1 })
+            await loadItems();
+            //window.location.reload();
+        }}
+    />
+);
+const loadItems = async () => {
+    const result = await apiService.get(`/items?status=0`);
+    return { items: result.data }
+}
 export default class Main extends Component {
 
     state = {
         items: [],
+        active: true
     }
 
+
     async componentDidMount() {
-        const result = await apiService.get(`/items?skip=0&limit=20`);
-        console.log('result', result);
-        this.setState({ items: result.data });
+        this.setState(await loadItems());
     }
 
     render() {
         const { items } = this.state
         return (
-            <Collapse
-                className="items-list"
-                bordered={false}
-                expandIcon={({ isActive }) => <Icon type="check-circle" theme={isActive ? "twoTone" : ""} />}
-            >
-                {items.map(items => (
-                    <Panel
-                        header={<strong>{items.title}</strong>}
-                        key={items._id}
-                        extra={genExtra(items.priority)}
-                    >
-                        <p>Priority: {items.priority}</p>
-                        <p>Date: {items.date}</p>
-                    </Panel>
-                ))}
-            </Collapse >
+            <>
+                <Collapse
+                    className="items-list"
+                    bordered={false}
+                    expandIcon={completeIcon}
+                >
+                    {items.map(items => (
+                        <Panel
+                            header={<strong>{items.title}</strong>}
+                            key={items._id}
+                            extra={genExtra(items.priority)}
+                        >
+                            <p>Priority: {items.priority}</p>
+                            <p>Date: {items.date}</p>
+                        </Panel>
+                    ))}
+                </Collapse >
 
-
-            // <Collapse
-            //     className="items-list"
-            //     style={{ border: 0 }}
-            //     expandIcon={({ isActive }) => <Icon type="check-circle" theme={isActive ? "twoTone" : ""} />}
-            // >
-            //     {items.map(items => (
-            //         <Panel
-            //             header={<strong>{items.title}</strong>}
-            //             showArrow={false}
-            //             key={items._id}
-            //             extra={genExtra(items.priority)}
-            //         >
-
-            //             <p>Priority: {items.priority}</p>
-            //             <p>Date: {items.date}</p>
-
-            //         </Panel>
-            //     ))}
-            // </Collapse>
-
-
-
-            // <div className="items-list">
-            //     {items.map(items => (
-            //         <article key={items._id}>
-            //             <Icon type="check-circle" theme="twoTone" />
-            //             <strong>{items.title}</strong>
-
-            //             <span style={PRIORITY_COLOR[items.priority]}></span>
-            //         </article>
-            //     ))}
-            // </div>
+                <CreateItemButton />
+            </>
         );
     }
 }
-
-
-
-// const customPanelStyle = {
-//     background: '#f7f7f7',
-//     borderRadius: 4,
-//     marginBottom: 24,
-//     border: 0,
-//     overflow: 'hidden',
-// };
-
-// <Collapse
-//     bordered={false}
-//     expandIcon={({ isActive }) => <Icon type="check-circle" theme={isActive ? "twoTone" : ""} />}
-// >
-//     <Panel header="This is panel header 1" key="1" style={customPanelStyle}>
-//         <p>{text}</p>
-//     </Panel>
-// </Collapse>
