@@ -29,7 +29,8 @@ export default class CreateItemButton extends Component {
                 priority: values.priority,
                 dateTime: () => new Date(values.dateTime)
             });
-            
+            window.location.reload();
+
             form.resetFields();
             this.setState({ visible: false });
         });
@@ -40,12 +41,14 @@ export default class CreateItemButton extends Component {
     };
 
     render() {
+        const { icon, type, item } = this.props;
         return (
             <>
                 <Button
                     type="primary"
                     shape="circle"
-                    icon="plus"
+                    icon={icon ? icon : "plus"}
+                    type={type ? type : "primary"}
                     size="large"
                     style={{ float: 'right', position: 'bottom' }}
                     onClick={this.showModal} />
@@ -55,6 +58,7 @@ export default class CreateItemButton extends Component {
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
                     onCreate={this.handleCreate}
+                    values={item}
                 />
             </>
         );

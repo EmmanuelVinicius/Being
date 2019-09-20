@@ -12,28 +12,41 @@ import 'antd/es/col/style/css';
 const { Option } = Select;
 
 class CreateItemForm extends Component {
+    state = {
+        title: 'Create a new Item',
+        okText: 'Create',
+        isEdit: false
+    }
+    isEdit = () => {
+        this.setState({
+            isEdit: true,
+            title: 'Edit item',
+            okText: 'Edit',
+        });
+    }
     render() {
-        const { visible, onCancel, onCreate, form } = this.props;
+        const { visible, onCancel, onCreate, form, value } = this.props;
         const { getFieldDecorator } = form;
+
         return (
             <Modal
                 visible={visible}
-                title="Create a new Item"
-                okText="Create"
+                title={this.state.title}
+                okText={this.state.okText}
                 onCancel={onCancel}
                 onOk={onCreate}
             >
                 <Form layout="vertical">
                     <Form.Item label="Title">
                         {getFieldDecorator('title', {
-                            rules: [{ required: true, message: 'Please input the title of the item!' }],
+                            rules: [{ required: true, message: 'Please input the title of the item!', setFieldsValue: value ? value.title : '' }],
                         })(<Input />)}
                     </Form.Item>
                     <Row>
                         <Col span="8">
                             <Form.Item label="Priority">
                                 {getFieldDecorator('priority', {
-                                    rules: [{ required: false, message: 'Please input the priority of the item!' }],
+                                    rules: [{ required: false, message: 'Please input the priority of the item!', setFieldsValue: value ? value.priority : '' }],
                                 })(
                                     <Select
                                         style={{ width: 200 }}
@@ -50,7 +63,7 @@ class CreateItemForm extends Component {
                         <Col span="8" offset="6">
                             <Form.Item label="Schedule to">
                                 {getFieldDecorator('dateTime', {
-                                    rules: [{ required: false, message: 'Please input the schedule of the item!' }],
+                                    rules: [{ required: false, message: 'Please input the schedule of the item!', setFieldsValue: value ? value.dateTime : '' }],
                                 })(
                                     <DatePicker style={{ width: 200 }} />
                                 )}

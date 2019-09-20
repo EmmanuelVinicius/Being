@@ -1,5 +1,4 @@
 const BaseRoute = require('./base/baseRoute');
-const QueryHelper = require('./../helpers/queryHelper');
 const Joi = require('joi')
 const Boom = require('boom')
 

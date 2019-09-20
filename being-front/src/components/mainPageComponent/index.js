@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { Collapse, Icon } from 'antd';
+import { Collapse, Icon, Col, Row } from 'antd';
 import apiService from '../../sevices/apiService';
 import CreateItemButton from '../createItemButtonComponent';
 
 import 'antd/es/icon/style/css';
 import 'antd/es/collapse/style/css';
+import 'antd/es/col/style/css';
+import 'antd/es/row/style/css';
 import './style.css';
 
 const { Panel } = Collapse;
@@ -38,7 +40,11 @@ const completeIcon = item => (
 );
 const loadItems = async status => {
     const result = await apiService.get(`/items?status=${status}`);
+    console.log('result', result);
     return { items: result.data }
+}
+const editItem = () => {
+    
 }
 export default class Main extends Component {
 
@@ -54,25 +60,34 @@ export default class Main extends Component {
 
     render() {
         const { items } = this.state
+
         return (
             <div className="items-list">
                 <Collapse
-                bordered={false}
-                expandIcon={completeIcon}
-            >
-                {items.map(items => (
-                    <Panel
-                        header={<strong>{items.title}</strong>}
-                        key={items._id}
-                        extra={genExtra(items.priority)}
-                    >
-                        <p>Priority: {items.priority}</p>
-                        <p>Date: {items.date}</p>
-                    </Panel>
-                ))}
-            </Collapse >
+                    bordered={false}
+                    expandIcon={completeIcon}
+                >
+                    {items.map(items => (
+                        <Panel
+                            header={<strong>{items.title}</strong>}
+                            key={items._id}
+                            extra={genExtra(items.priority)}
+                        >
+                            <Row>
+                                <Col span="8">
+                                    <p>Owner: <b>{items.owner}</b></p>
+                                </Col>
+                                <Col span="8" offset="6">
+                                    <p>Priority: <b>{items.priority}</b></p>
+                                </Col>
+                                <p>Created at: <b>{items.insertedAt}</b></p>
+                            </Row>
+                            <CreateItemButton icon="edit" type="link" item={items}/>
+                        </Panel>
+                    ))}
+                </Collapse >
 
-            <CreateItemButton />
+                <CreateItemButton />
             </div >
         );
     }
