@@ -36,7 +36,7 @@ class MongoDB extends ICrud {
 
     read(query, skip = 0, limit = 10) {
         const result = query.id ? this._schema.findById(query.id) :
-            this._schema.find().skip(skip).limit(limit);
+            this._schema.find(query).skip(skip).limit(limit);
         return result;
     }
 

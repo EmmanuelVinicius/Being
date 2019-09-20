@@ -34,11 +34,11 @@ class Modal extends Component {
   };
 
   handleSubmit = (data) => {
-    this.setState({
-      ModalText: 'The modal will be closed after two seconds',
-      confirmLoading: true,
-    });
-    apiService.post('/items', data);
+    // this.setState({
+    //   ModalText: 'The modal will be closed after two seconds',
+    //   confirmLoading: true,
+    // });
+    // apiService.post('/items', data);
 
     setTimeout(() => {
       this.setState({

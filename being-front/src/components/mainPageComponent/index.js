@@ -20,7 +20,6 @@ const genExtra = item => (
         theme="twoTone"
         twoToneColor={PRIORITY_COLOR[item]}
         onClick={event => {
-            // If you don't want click extra trigger collapse, you can prevent this:
             event.stopPropagation();
         }}
     />
@@ -30,16 +29,15 @@ const completeIcon = item => (
         type="check-circle"
         style={{ fontSize: '18px' }}
         onClick={async event => {
-            console.log('item', item);
             event.stopPropagation();
-            apiService.patch(`/items/${item.panelKey}`, { status: 1 })
-            await loadItems();
-            //window.location.reload();
+            const result = await apiService.patch(`/items/${item.panelKey}`, { status: 0 });
+
+            await loadItems(1);
         }}
     />
 );
-const loadItems = async () => {
-    const result = await apiService.get(`/items?status=0`);
+const loadItems = async status => {
+    const result = await apiService.get(`/items?status=${status}`);
     return { items: result.data }
 }
 export default class Main extends Component {
@@ -51,32 +49,31 @@ export default class Main extends Component {
 
 
     async componentDidMount() {
-        this.setState(await loadItems());
+        this.setState(await loadItems(1));
     }
 
     render() {
         const { items } = this.state
         return (
-            <>
+            <div className="items-list">
                 <Collapse
-                    className="items-list"
-                    bordered={false}
-                    expandIcon={completeIcon}
-                >
-                    {items.map(items => (
-                        <Panel
-                            header={<strong>{items.title}</strong>}
-                            key={items._id}
-                            extra={genExtra(items.priority)}
-                        >
-                            <p>Priority: {items.priority}</p>
-                            <p>Date: {items.date}</p>
-                        </Panel>
-                    ))}
-                </Collapse >
+                bordered={false}
+                expandIcon={completeIcon}
+            >
+                {items.map(items => (
+                    <Panel
+                        header={<strong>{items.title}</strong>}
+                        key={items._id}
+                        extra={genExtra(items.priority)}
+                    >
+                        <p>Priority: {items.priority}</p>
+                        <p>Date: {items.date}</p>
+                    </Panel>
+                ))}
+            </Collapse >
 
-                <CreateItemButton />
-            </>
+            <CreateItemButton />
+            </div >
         );
     }
 }

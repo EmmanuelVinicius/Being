@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Icon, Button } from 'antd';
+import { Button } from 'antd';
 import CreateItemForm from './../createItemFormComponent';
 import apiService from '../../sevices/apiService';
-import moment from 'moment';
 
 export default class CreateItemButton extends Component {
     state = {
@@ -19,14 +18,18 @@ export default class CreateItemButton extends Component {
 
     handleCreate = () => {
         const { form } = this.formRef.props;
-        form.validateFields((err, values) => {
+        form.validateFields(async (err, values) => {
             if (err) {
                 return;
             }
 
-            values.dateTime = moment().format();
-            apiService.post('/items', { title: values.title, owner: 'Emmanuel', priority: values.priority, dateTime: values.dateTime })
-            console.log('Received values of form: ', values);
+            await apiService.post('/items', {
+                title: values.title,
+                owner: 'Emmanuel',
+                priority: values.priority,
+                dateTime: () => new Date(values.dateTime)
+            });
+            
             form.resetFields();
             this.setState({ visible: false });
         });
@@ -39,9 +42,14 @@ export default class CreateItemButton extends Component {
     render() {
         return (
             <>
-                <Button type="primary" onClick={this.showModal}>
-                    <Icon type="plus" />
-                </Button>
+                <Button
+                    type="primary"
+                    shape="circle"
+                    icon="plus"
+                    size="large"
+                    style={{ float: 'right', position: 'bottom' }}
+                    onClick={this.showModal} />
+
                 <CreateItemForm
                     wrappedComponentRef={this.saveFormRef}
                     visible={this.state.visible}

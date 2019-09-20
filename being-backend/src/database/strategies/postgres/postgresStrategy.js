@@ -18,7 +18,7 @@ class Postgres extends ICrud {
                 host: 'raja.db.elephantsql.com',
                 dialect: 'postgres',
                 quoteIdentifiers: false,
-                operatorsAliases: false,
+                // operatorsAliases: false,
                 logging: false
             }
         );

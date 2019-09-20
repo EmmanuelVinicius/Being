@@ -1,4 +1,5 @@
 const BaseRoute = require('./base/baseRoute');
+const QueryHelper = require('./../helpers/queryHelper');
 const Joi = require('joi')
 const Boom = require('boom')
 
@@ -20,11 +21,11 @@ class ItemsRoutes extends BaseRoute {
                     failAction,
                     headers,
                     query: {
-                        skip: Joi.number().integer().default(0),
-                        limit: Joi.number().integer().default(10),
+                        skip: Joi.number().integer(),
+                        limit: Joi.number().integer(),
                         title: Joi.string().min(3).max(100),
                         owner: Joi.string().min(3).max(100),
-                        status: Joi.number().integer().default(1),
+                        status: Joi.number().integer(),
                         datetime: Joi.date(),
                         priority: Joi.number().integer()
                     },
@@ -32,12 +33,18 @@ class ItemsRoutes extends BaseRoute {
 
                 handler: async (request, response) => {
                     try {
+                        const {
+                            skip,
+                            limit,
+                        } = request.query;
+
                         const stringData = JSON.stringify(request.query);
-                        const { skip, limit } = request.query
+
                         const data = JSON.parse(stringData);
 
-                        const teste = await this._db.read(data, skip, limit);
-                        return teste
+
+
+                        return await this._db.read(data, skip, limit);
                     } catch (error) {
                         console.error('DEU RUIM', error)
                         return Boom.internal('Erro interno do servidor');
@@ -95,9 +102,9 @@ class ItemsRoutes extends BaseRoute {
                     payload: {
                         title: Joi.string().min(3).max(100),
                         owner: Joi.string().min(3).max(100),
-                        status: Joi.number().integer().default(1),
+                        status: Joi.number().integer(),
                         datetime: Joi.date(),
-                        priority: Joi.number().integer().default(4)
+                        priority: Joi.number().integer()
                     },
                 }
             },
